@@ -113,6 +113,7 @@ openpanda/
 | 数据安全与备份 | [docs/data-safety.md](docs/data-safety.md) |
 | 后端 API | [docs/backend-api.md](docs/backend-api.md) |
 | 前端 API 模块 | [docs/frontend-api.md](docs/frontend-api.md) |
+| 版本发布命名 | [/docs/versionRule.md](docs/versionRule.md) |
 
 ---
 
