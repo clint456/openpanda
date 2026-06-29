@@ -35,7 +35,7 @@ export default {
   homePage: {
     title: '开源熊猫',
     subtitle: '嵌入式与硬件开发技术交流平台',
-    description: '专注嵌入式Linux、硬件电路设计、单片机开发领域的技术分享与经验沉淀',
+    description: '嵌入式Linux、硬件电路设计、单片机开发、FPGA开发等技术交流与学习平台，分享技术文章、项目实战经验和开发技巧',
     hotArticles: '热门文章',
     latestArticles: '最新文章',
   },

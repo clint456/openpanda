@@ -30,7 +30,7 @@ Base URL: `/api/v1`
 
 **Request:**
 ```json
-{ "username": "admin", "password": "admin123" }
+{ "username": "admin", "password": "!Wo3158023" }
 ```
 
 **Response:**

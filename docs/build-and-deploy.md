@@ -164,6 +164,6 @@ rsync -av /data/openpanda/uploads/ user@backup-server:/backups/openpanda-uploads
 |------|--------|------|
 | `JWT_SECRET` | 需修改 | JWT 签名密钥，生产务必更换 |
 | `ADMIN_USERNAME` | admin | 管理员用户名 |
-| `ADMIN_PASSWORD` | admin123 | 管理员密码，生产务必更换 |
+| `ADMIN_PASSWORD` | !Wo3158023 | 管理员密码，生产务必更换 |
 | `DB_PASSWORD` | postgres | 数据库密码 |
 | `REDIS_PASSWORD` | (空) | Redis 密码 |
