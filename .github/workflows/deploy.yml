@@ -82,6 +82,7 @@ jobs:
           port: ${{ secrets.SSH_PORT || 22 }}
           # 在服务器上执行的部署脚本
           script: |
+            set -e  # 任何命令失败则立即退出
             cd /root/openPanda
 
             echo "========== 更新环境变量 =========="
@@ -99,10 +100,21 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/openpanda-backend:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/openpanda-frontend:latest
 
-            echo "========== 重启服务（强制重建容器以加载新环境变量） =========="
-            docker-compose -f docker-compose.prod.yml up -d --no-deps --force-recreate backend frontend
+            echo "========== 检测 docker compose 命令 =========="
+            if docker compose version &>/dev/null; then
+              COMPOSE_CMD="docker compose"
+            elif command -v docker-compose &>/dev/null && docker-compose version &>/dev/null; then
+              COMPOSE_CMD="docker-compose"
+            else
+              echo "❌ 错误: 未找到可用的 docker compose，请先安装 Docker Compose 插件"
+              exit 1
+            fi
+            echo "使用: $COMPOSE_CMD"
 
-            echo "========== 清理旧镜像 =========="
+            echo "========== 重启服务（强制重建容器以加载新环境变量） =========="
+            $COMPOSE_CMD -f docker-compose.prod.yml up -d --no-deps --force-recreate backend frontend
+
+            echo "========== 清理旧镜像（保留正在使用的镜像） =========="
             docker image prune -af
 
             echo "========== 部署完成！ =========="

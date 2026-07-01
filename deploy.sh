@@ -13,6 +13,16 @@ set -e
 PROJECT_DIR="/data/openpanda"
 COMPOSE_FILE="docker-compose.prod.yml"
 
+# 优先使用 docker compose (插件), 其次 docker-compose (独立二进制)
+if docker compose version &>/dev/null; then
+  COMPOSE_CMD="docker compose"
+elif command -v docker-compose &>/dev/null && docker-compose version &>/dev/null; then
+  COMPOSE_CMD="docker-compose"
+else
+  echo "❌ 错误: 未找到可用的 docker compose"
+  exit 1
+fi
+
 cd "$PROJECT_DIR"
 
 backup_db() {
@@ -24,11 +34,11 @@ backup_db() {
 }
 
 show_logs() {
-    docker-compose -f "$COMPOSE_FILE" logs -f --tail=100
+    $COMPOSE_CMD -f "$COMPOSE_FILE" logs -f --tail=100
 }
 
 status() {
-    docker-compose -f "$COMPOSE_FILE" ps
+    $COMPOSE_CMD -f "$COMPOSE_FILE" ps
     echo ""
     echo "磁盘使用:"
     df -h /data
