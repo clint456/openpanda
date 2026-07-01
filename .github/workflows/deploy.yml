@@ -8,7 +8,7 @@
 #   DOCKERHUB_TOKEN        DockerHub Access Token (Settings → Security)
 #   SSH_HOST               服务器 IP / 域名
 #   SSH_USER               服务器 SSH 用户 (如 root)
-#   SSH_PRIVATE_KEY        服务器 SSH 私钥
+#   SSH_PASSWORD           服务器 SSH 密码
 #   SSH_PORT               服务器 SSH 端口 (默认 22)
 # ============================================================
 name: Build & Deploy
@@ -73,7 +73,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT || 22 }}
           # 在服务器上执行的部署脚本
           script: |
