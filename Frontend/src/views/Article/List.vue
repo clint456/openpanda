@@ -33,7 +33,7 @@
         :key="article.id"
         class="article__card"
         shadow="hover"
-        @click="goToDetail(article.id)"
+        @click="goToDetail(article)"
       >
         <div class="article__card-body">
           <!-- 封面图 -->
@@ -91,6 +91,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Search as SearchIcon } from '@element-plus/icons-vue'
 import { getArticles, searchArticles } from '@/api/modules/article'
+import { getArticleUrl } from '@/utils'
 import type { Article } from '@/types'
 
 const router = useRouter()
@@ -154,8 +155,8 @@ function handlePageChange(): void {
 }
 
 /** 跳转详情 */
-function goToDetail(id: number): void {
-  router.push(`/articles/${id}`)
+function goToDetail(article: Article): void {
+  router.push(getArticleUrl(article))
 }
 
 /** 格式化日期（ISO字符串 → 中文日期） */

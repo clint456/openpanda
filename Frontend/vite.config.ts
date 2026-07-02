@@ -37,10 +37,13 @@ export default defineConfig({
     open: false,                         // 启动后自动打开浏览器
     // proxy: 代理配置，将 /api 请求转发到后端（解决跨域）
     proxy: {
+      '/sitemap.xml': {
+        target: 'http://localhost:8080', // 后端地址
+        changeOrigin: true,
+      },
       '/api': {
         target: 'http://localhost:8080', // 后端地址
         changeOrigin: true,              // 修改请求头中的 origin
-        // rewrite: (path) => path.replace(/^\/api/, ''), // 如需去掉 /api 前缀，取消注释
       },
     },
   },

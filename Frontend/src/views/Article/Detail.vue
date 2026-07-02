@@ -82,6 +82,7 @@ import { ArrowLeft as ArrowLeftIcon, Edit as EditIcon, Delete as DeleteIcon } fr
 import { getArticleById, deleteArticle } from '@/api/modules/article'
 import { useAuthStore } from '@/stores/auth'
 import { marked } from 'marked'       // Markdown 解析器
+import { parseArticleId, getArticleUrl } from '@/utils'
 import type { Article } from '@/types'
 
 const route = useRoute()
@@ -104,9 +105,8 @@ const renderedContent = computed<string>(() => {
 // 生命周期
 // ============================================================
 onMounted(async () => {
-  // 从路由参数中获取文章ID
-  // route.params.id 的类型是 string | string[]（因为可能有多个同名参数）
-  const id = Number(route.params.id) // Number() 转换为数字
+  // 从路由参数提取数字ID（兼容 /articles/123 和 /articles/123-slug）
+  const id = parseArticleId(route.params.slug as string)
   if (id) {
     await fetchArticle(id)
   } else {
@@ -146,7 +146,8 @@ function formatDate(dateStr: string): string {
 
 /** 跳转到编辑页 */
 function goEdit(): void {
-  router.push(`/articles/${article.value?.id}/edit`)
+  if (!article.value) return
+  router.push(`/articles/${article.value.id}-${article.value.slug || article.value.id}/edit`)
 }
 
 /** 删除文章 */

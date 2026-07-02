@@ -50,7 +50,7 @@
           :key="article.id"
           class="article__card"
           shadow="hover"
-          @click="goToArticle(article.id)"
+          @click="goToArticle(article)"
         >
           <div class="article__info">
             <h3>{{ article.title }}</h3>
@@ -76,6 +76,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getArticles, getCategories } from '@/api/modules/article'
+import { getArticleUrl } from '@/utils'
 import type { Article, Category } from '@/types'
 
 const router = useRouter()
@@ -135,8 +136,8 @@ async function fetchLatestArticles(): Promise<void> {
 }
 
 /** 跳转到文章详情页 */
-function goToArticle(id: number): void {
-  router.push(`/articles/${id}`)
+function goToArticle(article: Article): void {
+  router.push(getArticleUrl(article))
 }
 </script>
 

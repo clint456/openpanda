@@ -13,6 +13,7 @@ package service
 
 import (
 	"openpanda-backend/model"
+	"openpanda-backend/utils"
 
 	"gorm.io/gorm"
 )
@@ -87,13 +88,19 @@ func (s *ArticleService) GetByID(id uint) (*model.Article, error) {
 	return &article, nil
 }
 
-// Create 创建文章
+// Create 创建文章（自动生成 slug）
 func (s *ArticleService) Create(article *model.Article) error {
+	if article.Slug == "" {
+		article.Slug = utils.GenerateSlug(article.Title)
+	}
 	return s.DB.Create(article).Error
 }
 
-// Update 更新文章
+// Update 更新文章（slug 为空则重新生成）
 func (s *ArticleService) Update(article *model.Article) error {
+	if article.Slug == "" {
+		article.Slug = utils.GenerateSlug(article.Title)
+	}
 	return s.DB.Save(article).Error
 }
 
@@ -118,6 +125,18 @@ func (s *ArticleService) GetHotArticles(limit int) ([]model.Article, error) {
 		Order("view_count DESC").
 		Limit(limit).
 		Preload("Category").
+		Find(&articles).Error; err != nil {
+		return nil, err
+	}
+	return articles, nil
+}
+
+// GetAllPublished 获取所有已发布文章（无分页，用于 sitemap 等）
+func (s *ArticleService) GetAllPublished() ([]model.Article, error) {
+	var articles []model.Article
+	if err := s.DB.
+		Where("is_published = ?", true).
+		Order("updated_at DESC").
 		Find(&articles).Error; err != nil {
 		return nil, err
 	}

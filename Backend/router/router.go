@@ -50,6 +50,7 @@ func SetupRouter(db *gorm.DB, aiController *controller.AIController, settingCont
 	articleController := controller.NewArticleController(articleService, categoryService)
 	authController := controller.NewAuthController()
 	uploadController := controller.NewUploadController()
+	sitemapController := controller.NewSitemapController(articleService, categoryService)
 
 	// ============================================================
 	// 静态文件服务（上传的图片通过此路由访问）
@@ -114,6 +115,11 @@ func SetupRouter(db *gorm.DB, aiController *controller.AIController, settingCont
 	{
 		auth.GET("/me", authController.GetMe) // 获取当前用户信息
 	}
+
+	// ============================================================
+	// Sitemap（SEO，搜索引擎爬虫）
+	// ============================================================
+	r.GET("/sitemap.xml", sitemapController.Generate)
 
 	// ============================================================
 	// 健康检查接口（用于监控和负载均衡探测）

@@ -52,6 +52,28 @@ export function stripHtml(html: string): string {
 }
 
 /**
+ * 生成 SEO 友好的文章 URL
+ * 格式：/articles/{id}-{slug}
+ * 如果 slug 为空则退化为 /articles/{id}
+ *
+ * 示例：getArticleUrl({ id: 1, slug: 'hello-world' }) => '/articles/1-hello-world'
+ */
+export function getArticleUrl(article: { id: number; slug?: string }): string {
+  const slug = article.slug || ''
+  return slug ? `/articles/${article.id}-${slug}` : `/articles/${article.id}`
+}
+
+/**
+ * 从文章 URL slug 参数中提取数字 ID
+ * "/articles/1-hello-world" → 1
+ * "/articles/123" → 123
+ */
+export function parseArticleId(slug: string): number {
+  const match = slug.match(/^(\d+)/)
+  return match ? Number(match[1]) : 0
+}
+
+/**
  * 防抖函数（限制函数调用频率）
  * 用途：搜索输入框、窗口 resize 等高频触发场景
  *
